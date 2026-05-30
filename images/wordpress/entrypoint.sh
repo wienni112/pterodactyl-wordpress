@@ -64,6 +64,9 @@ echo "Starting PHP-FPM..."
 
 php-fpm -D
 
+echo "Configuring Nginx listen port: ${SERVER_PORT:-8080}"
+sed -i "s/listen 8080;/listen ${SERVER_PORT:-8080};/g" /etc/nginx/conf.d/default.conf
+
 echo "Starting Nginx..."
 
 exec nginx -g "daemon off;"
