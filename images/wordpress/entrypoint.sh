@@ -77,55 +77,67 @@ echo "Starting PHP-FPM..."
 
 php-fpm -D
 
-echo "Starting Nginx..."
+echo "Generating Nginx config..."
 
-cat > /tmp/default.conf <<EOF
-server {
-    listen ${SERVER_PORT:-8080};
-    server_name _;
+cat > /tmp/nginx.conf <<EOF
+events {
+    worker_connections 1024;
+}
 
-    root /home/container;
-    index index.php index.html;
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
 
-    client_max_body_size 128M;
+    access_log /dev/stdout;
+    error_log /dev/stderr warn;
 
-    location / {
-        try_files \$uri \$uri/ /index.php?\$args;
-    }
+    server {
+        listen ${SERVER_PORT:-8080};
+        server_name _;
 
-    location ~ \.php$ {
-        try_files \$uri =404;
+        root /home/container;
+        index index.php index.html;
 
-        include fastcgi_params;
-        fastcgi_pass 127.0.0.1:9000;
+        client_max_body_size 128M;
 
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
-        fastcgi_param SCRIPT_NAME \$fastcgi_script_name;
+        location / {
+            try_files \$uri \$uri/ /index.php?\$args;
+        }
 
-        fastcgi_read_timeout 300;
-    }
+        location ~ \.php$ {
+            try_files \$uri =404;
 
-    location ~* \.(jpg|jpeg|png|gif|ico|webp|svg|css|js|woff|woff2|ttf|eot)$ {
-        expires 30d;
-        access_log off;
-        try_files \$uri =404;
-    }
+            include fastcgi_params;
+            fastcgi_pass 127.0.0.1:9000;
 
-    location ~ /\. {
-        deny all;
-    }
+            fastcgi_index index.php;
+            fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+            fastcgi_param SCRIPT_NAME \$fastcgi_script_name;
 
-    location ~* /(wp-config\.php|readme\.html|license\.txt)$ {
-        deny all;
-    }
+            fastcgi_read_timeout 300;
+        }
 
-    location = /xmlrpc.php {
-        deny all;
+        location ~* \.(jpg|jpeg|png|gif|ico|webp|svg|css|js|woff|woff2|ttf|eot)$ {
+            expires 30d;
+            access_log off;
+            try_files \$uri =404;
+        }
+
+        location ~ /\. {
+            deny all;
+        }
+
+        location ~* /(wp-config\.php|readme\.html|license\.txt)$ {
+            deny all;
+        }
+
+        location = /xmlrpc.php {
+            deny all;
+        }
     }
 }
 EOF
 
 echo "Starting Nginx on port ${SERVER_PORT:-8080}..."
 
-exec nginx -c /tmp/default.conf -g "daemon off;"
+exec nginx -c /tmp/nginx.conf -g "daemon off;"
