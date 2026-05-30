@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN docker-php-ext-install mysqli pdo pdo_mysql exif opcache
 
 RUN curl -fsSL -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
     && chmod +x /usr/local/bin/wp
@@ -35,4 +35,4 @@ WORKDIR /home/container
 
 EXPOSE 8080
 
-CMD ["/entrypoint.sh"]
+CMD ["/bin/bash"]

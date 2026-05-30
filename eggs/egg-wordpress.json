@@ -1,0 +1,112 @@
+{
+  "meta": {
+    "version": "PTDL_v2",
+    "update_url": null
+  },
+  "exported_at": "2026-05-30T00:00:00+00:00",
+  "name": "WordPress",
+  "author": "wienni112@gmail.com",
+  "description": "WordPress with Nginx, PHP-FPM and WP-CLI",
+  "features": [],
+  "docker_images": {
+    "WordPress PHP 8.3": "ghcr.io/wienni112/pterodactyl-wordpress:php8.3"
+  },
+  "file_denylist": [],
+  "startup": "/entrypoint.sh",
+  "config": {
+    "files": "{}",
+    "startup": "{\r\n    \"done\": \"Starting Nginx\"\r\n}",
+    "logs": "{}",
+    "stop": "^C"
+  },
+  "scripts": {
+    "installation": {
+      "script": "#!/bin/bash\nexit 0",
+      "container": "debian:12-slim",
+      "entrypoint": "bash"
+    }
+  },
+  "variables": [
+    {
+      "name": "Site URL",
+      "description": "WordPress URL",
+      "env_variable": "SITE_URL",
+      "default_value": "https://wordpress.example.com",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255"
+    },
+    {
+      "name": "Site Title",
+      "description": "WordPress Site Name",
+      "env_variable": "SITE_TITLE",
+      "default_value": "My WordPress",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:255"
+    },
+    {
+      "name": "Admin User",
+      "description": "WordPress Administrator",
+      "env_variable": "ADMIN_USER",
+      "default_value": "admin",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string|max:50"
+    },
+    {
+      "name": "Admin Password",
+      "description": "WordPress Administrator Password",
+      "env_variable": "ADMIN_PASS",
+      "default_value": "",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "required|string|min:8"
+    },
+    {
+      "name": "Admin Email",
+      "description": "Administrator E-Mail",
+      "env_variable": "ADMIN_EMAIL",
+      "default_value": "admin@example.com",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|email"
+    },
+    {
+      "name": "Database Host",
+      "description": "MySQL Host",
+      "env_variable": "DB_HOST",
+      "default_value": "mysql",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string"
+    },
+    {
+      "name": "Database Name",
+      "description": "MySQL Database",
+      "env_variable": "DB_NAME",
+      "default_value": "wordpress",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string"
+    },
+    {
+      "name": "Database User",
+      "description": "MySQL User",
+      "env_variable": "DB_USER",
+      "default_value": "wordpress",
+      "user_viewable": true,
+      "user_editable": true,
+      "rules": "required|string"
+    },
+    {
+      "name": "Database Password",
+      "description": "MySQL Password",
+      "env_variable": "DB_PASS",
+      "default_value": "",
+      "user_viewable": false,
+      "user_editable": true,
+      "rules": "required|string"
+    }
+  ]
+}

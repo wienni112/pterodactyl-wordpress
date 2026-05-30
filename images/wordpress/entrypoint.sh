@@ -19,6 +19,19 @@ if [ ! -f wp-config.php ]; then
 
     wp core download --allow-root
 
+    echo "Waiting for database..."
+
+    until mysql \
+    -h"${DB_HOST}" \
+    -u"${DB_USER}" \
+    -p"${DB_PASS}" \
+    -e "SELECT 1" >/dev/null 2>&1
+    do
+    sleep 5
+    done
+
+    echo "Database is available"
+
     wp config create \
         --dbname="${DB_NAME}" \
         --dbuser="${DB_USER}" \
