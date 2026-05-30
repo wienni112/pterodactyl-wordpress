@@ -79,6 +79,9 @@ php-fpm -D
 
 echo "Generating Nginx config..."
 
+mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi
+
+
 cat > /tmp/nginx.conf <<EOF
 events {
     worker_connections 1024;
@@ -87,6 +90,13 @@ events {
 http {
     include /etc/nginx/mime.types;
     default_type application/octet-stream;
+
+    client_body_temp_path /tmp/nginx/client_body;
+    proxy_temp_path /tmp/nginx/proxy;
+    fastcgi_temp_path /tmp/nginx/fastcgi;
+    uwsgi_temp_path /tmp/nginx/uwsgi;
+    scgi_temp_path /tmp/nginx/scgi;
+
 
     access_log /dev/stdout;
     error_log /dev/stderr warn;
