@@ -8,6 +8,16 @@ echo "========================================"
 
 cd /home/container
 
+# Datenbank Host/Port aufteilen
+DB_PORT="3306"
+
+if [[ "${DB_HOST}" == *":"* ]]; then
+    DB_PORT="${DB_HOST##*:}"
+    DB_HOST_ONLY="${DB_HOST%%:*}"
+else
+    DB_HOST_ONLY="${DB_HOST}"
+fi
+
 # Standardwerte
 PHP_FPM_PID=""
 
@@ -22,7 +32,8 @@ if [ ! -f wp-config.php ]; then
     echo "Waiting for database..."
 
     until mysql \
-    -h"${DB_HOST}" \
+    -h"${DB_HOST_ONLY}" \
+    -P"${DB_PORT}" \
     -u"${DB_USER}" \
     -p"${DB_PASS}" \
     -e "SELECT 1" >/dev/null 2>&1
