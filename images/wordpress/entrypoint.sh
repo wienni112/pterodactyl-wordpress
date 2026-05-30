@@ -83,6 +83,8 @@ mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/u
 
 
 cat > /tmp/nginx.conf <<EOF
+pid /tmp/nginx.pid;
+
 events {
     worker_connections 1024;
 }
