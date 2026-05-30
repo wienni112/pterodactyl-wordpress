@@ -73,9 +73,6 @@ else
 
 fi
 
-# Dateirechte setzen
-chown -R www-data:www-data /home/container
-
 echo "Starting PHP-FPM..."
 
 php-fpm -D
