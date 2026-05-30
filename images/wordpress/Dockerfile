@@ -35,4 +35,5 @@ WORKDIR /home/container
 
 EXPOSE 8080
 
-CMD ["/bin/bash"]
+ENTRYPOINT []
+CMD ["/entrypoint.sh"]
