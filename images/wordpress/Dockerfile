@@ -26,8 +26,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY php.ini /usr/local/etc/php/conf.d/custom.ini
 COPY entrypoint.sh /entrypoint.sh
-
-RUN chmod +x /entrypoint.sh \
+COPY update-wordpress.sh /usr/local/bin/update-wordpress
+RUN chmod +x /entrypoint.sh /usr/local/bin/update-wordpress \
     && mkdir -p /home/container \
     && chown -R www-data:www-data /home/container
 
