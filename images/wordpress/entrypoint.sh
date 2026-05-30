@@ -27,7 +27,12 @@ if [ ! -f wp-config.php ]; then
     echo "No wp-config.php found"
     echo "Installing WordPress..."
 
-    wp core download --allow-root
+    if [ ! -f index.php ] || [ ! -d wp-admin ]; then
+        echo "Downloading WordPress core..."
+        wp core download --allow-root --force
+    else
+        echo "WordPress core files already exist"
+    fi
 
     echo "Waiting for database..."
 
